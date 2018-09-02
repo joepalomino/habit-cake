@@ -12,10 +12,6 @@ function App() {
 
 export default App;
 
-injectGlobal(`
-  @import url('https://fonts.googleapis.com/css?family=Open+Sans|Pacifico');;
-`);
-
 // css resets
 
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
