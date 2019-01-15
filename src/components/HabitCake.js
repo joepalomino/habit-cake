@@ -1,25 +1,45 @@
-import React, { Fragment } from 'react';
-import { injectGlobal } from 'emotion';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import TypeAhead from './typeAhead';
-import Draw from './Draw';
-import HabitCake from './HabitCake';
+import React from 'react';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-boost';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { injectGlobal } from 'react-emotion';
+import App from './habit-cake/App';
 
-function App() {
+const httpLink = createHttpLink({
+  uri: 'https://habit-cake.herokuapp.com/habit-cake/dev',
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
+
+function HabitCake() {
   return (
-    <Router>
-      <Fragment>
-        <Route path="/typeAhead" exact component={TypeAhead} />
-        <Route path="/draw" component={Draw} />
-        <Route path="/habitCake" component={HabitCake} />
-      </Fragment>
-    </Router>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
   );
 }
 
-export default App;
+export default HabitCake;
 
-// css resets
+// resets
+injectGlobal(`ul {
+  padding: 0;
+  margin: 0;
+}`);
+
+injectGlobal(`li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}`);
+
+injectGlobal(`* {
+  box-sizing: border-box;
+}`);
 
 /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
 
@@ -50,6 +70,9 @@ injectGlobal(`html {
 
 injectGlobal(`body {
   margin: 0;
+  color: rgba(0,0,0,0.84);
+  font-family: 'Open Sans';
+  box-sizing: border-box;
 }`);
 
 /**
@@ -292,12 +315,6 @@ textarea {
 injectGlobal(`button,
 input { /* 1 */
   overflow: visible;
-
-}`);
-
-injectGlobal(`input:focus { /* 1 */
-  outline: none;
-
 }`);
 
 /**
@@ -320,7 +337,7 @@ injectGlobal(`button,
 html [type="button"], /* 1 */
 [type="reset"],
 [type="submit"] {
-  -webkit-appearance: button; /* 2 */
+  -webkit-appearance: none; /* 2 */
 }`);
 
 /**
@@ -489,13 +506,3 @@ injectGlobal(`template {
 injectGlobal(`[hidden] {
   display: none;
 }`);
-
-injectGlobal(`* {
-  box-sizing: border-box;
-}
-`);
-
-injectGlobal(`body {
-  font-family: 'Open Sans';
-}
-`);
